@@ -41,6 +41,7 @@ activity_avg <- dbplyr_act |>
 
 ```{r}
 #| message: false
+#| results: hide
 keep_cats <- c(
   "Personal Care Activities",
   "Household Activities",
@@ -90,13 +91,14 @@ activity_avg |>
 ```
 
 ```{r}
+#| fig-width: 12
 hourly_avg |>
   ggplot(aes(x = hour, y = avg_min, fill = major_name)) +
   geom_area() +
   facet_wrap(vars(sex)) +
   scale_x_continuous(
     breaks = 6:23,
-    labels = paste0(6:23, ":00")
+    labels = \(x) paste0(ifelse(x %% 12 == 0, 12, x %% 12), ifelse(x < 12, "am", "pm"))
   ) +
   labs(
     title = "How Weekdays Fill Up",
